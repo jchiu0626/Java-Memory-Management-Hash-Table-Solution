@@ -42,9 +42,9 @@ public class HashTable {
         if (count > size / 2) {
             resize(2 * size);
         }
-        int i;
-        for (i = h1(key); (array[i] != null && 
-                array[i].getKey() != -1) ; i = (i + h2(key)) % size) {
+        int i = h1(key);
+        while (array[i] != null && array[i].getKey() != -1) {
+            i = (i + h2(key)) % size;
         }
         array[i] = new Record(key, handle);
     }
@@ -166,5 +166,15 @@ public class HashTable {
 
     public int getSize() {
         return this.size;
+    }
+    
+    /**
+     * Return the array of the hash table
+     *
+     * @return the array of the hash table
+     */
+
+    public Record[] getArray() {
+        return this.array;
     }
 }

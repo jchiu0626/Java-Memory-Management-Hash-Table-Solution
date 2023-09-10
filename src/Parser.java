@@ -103,20 +103,7 @@ public class Parser {
         // TODO insert the byte array into the memory manager and get the handle
         // TODO insert the key and handle into the hash table
         System.out.println("Successfully inserted record with ID " + id);
-        System.out.println("ID: " + id + ", Title: " + title);
-        System.out.println("Date: " + date + ", Length: " + length + 
-                ", X: " + x + ", Y: " + y + ", Cost: " + cost);
-        System.out.println("Description: " + desc);
-        System.out.print("Keywords: ");
-        for (int i = 0; i < keywords.length; i++) {
-            System.out.print(keywords[i]);
-            if (i != (keywords.length - 1)) {
-                System.out.print(", ");
-            }
-            else {
-                System.out.println();
-            }
-        }
+        System.out.println(seminar.toString());
         // TODO print the size
         System.out.println("Size: ");
         Handle handle = new Handle();
