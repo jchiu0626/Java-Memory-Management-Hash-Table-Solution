@@ -60,13 +60,11 @@ public class HashTable {
             return;
         }
         int i = h1(key);
-        while (array[i] != null && array[i].getKey() != key) {
+        while (array[i].getKey() != key) {
             i = (i + h2(key)) % size;
         }
-        if (array[i] != null) {
-            array[i] = new Record(-1, new Handle());
-            count--;
-        }
+        array[i] = new Record(-1, new Handle());
+        count--;
     }
 
     /**
@@ -104,7 +102,7 @@ public class HashTable {
     }
     
     /**
-     * Print the index with keys in the hash table
+     * Print the contents in the hash table if there exists key and value
      *
      */
 
@@ -129,7 +127,7 @@ public class HashTable {
      * @return the hash value of the id using the first hash function
      */
 
-    int h1(int k) {
+    public int h1(int k) {
         try {
             return k % size;
         }
@@ -147,7 +145,7 @@ public class HashTable {
      * @return the hash value of the id using the second hash function
      */
 
-    int h2(int k) {
+    public int h2(int k) {
         try {
             return (((k / size) % (size / 2)) * 2) + 1;
         }
@@ -176,5 +174,15 @@ public class HashTable {
 
     public Record[] getArray() {
         return this.array;
+    }
+    
+    /**
+     * Return the number of the keys of the hash table
+     *
+     * @return the number of the keys of the hash table
+     */
+
+    public int getCount() {
+        return this.count;
     }
 }
