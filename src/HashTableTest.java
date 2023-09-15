@@ -1,11 +1,13 @@
 import org.junit.Test;
-
 import student.TestCase;
 
+//-------------------------------------------------------------------------
 /**
- * @author Yung-Lin Chiu
- * @version September 2023
- */
+*  Test the HashTable class
+*
+*  @author Yung-Lin Chiu
+*  @version September 2023
+*/
 public class HashTableTest extends TestCase {
     /**
      * Sets up the tests that follow. In general, used for initialization
@@ -16,7 +18,7 @@ public class HashTableTest extends TestCase {
 
 
     /**
-     * Get code coverage of the class declaration.
+     * Test constructor without parameter
      */
     @Test
     public void testConstructorWithoutParameter() {
@@ -25,7 +27,7 @@ public class HashTableTest extends TestCase {
     }
     
     /**
-     * Get code coverage of the class declaration.
+     * Test constructor with parameter
      */
     @Test
     public void testConstructorWithParameter() {
@@ -40,9 +42,9 @@ public class HashTableTest extends TestCase {
     public void testInsertInEmptySlot() {
         HashTable hashTable = new HashTable(4);
         Handle handle = new Handle();
-        assertTrue(hashTable.getArray()[1] == null);
+        assertNull(hashTable.getArray()[1]);
         hashTable.insert(1, handle);
-        assertTrue(hashTable.getArray()[1] != null);
+        assertNotNull(hashTable.getArray()[1]);
         assertTrue(hashTable.getArray()[1].getKey() != -1);
     }
     
@@ -53,15 +55,15 @@ public class HashTableTest extends TestCase {
     public void testInsertInTombstoneSlot() {
         HashTable hashTable = new HashTable(4);
         Handle handle = new Handle();
-        assertTrue(hashTable.getArray()[1] == null);
+        assertNull(hashTable.getArray()[1]);
         hashTable.insert(1, handle);
         hashTable.delete(1);
-        assertTrue(hashTable.getArray()[1] != null);
+        assertNotNull(hashTable.getArray()[1]);
         assertFalse(hashTable.getArray()[1].getKey() != -1);
         hashTable.insert(1, handle);
-        assertTrue(hashTable.getArray()[1] != null);
+        assertNotNull(hashTable.getArray()[1]);
         assertTrue(hashTable.getArray()[1].getKey() != -1);
-        assertTrue(hashTable.getArray()[1].getHandle() != null);
+        assertNotNull(hashTable.getArray()[1].getHandle());
     }
     
     /**
@@ -72,9 +74,9 @@ public class HashTableTest extends TestCase {
         HashTable hashTable = new HashTable(4);
         Handle handle = new Handle();
         hashTable.insert(1, handle);
-        assertTrue(hashTable.getArray()[1] != null);
+        assertNotNull(hashTable.getArray()[1]);
         hashTable.insert(5, handle);
-        assertTrue(hashTable.getArray()[1] != null);
+        assertNotNull(hashTable.getArray()[1]);
         assertTrue(hashTable.getArray()[(hashTable.h1(5) + hashTable.h2(5))
                                         % hashTable.getSize()] != null);
         assertTrue(hashTable.getArray()[1].getKey() != -1);
@@ -87,8 +89,7 @@ public class HashTableTest extends TestCase {
     @Test
     public void testDeleteNull() {
         HashTable hashTable = new HashTable(4);
-        Handle handle = new Handle();
-        assertTrue(hashTable.search(1) == null);
+        assertNull(hashTable.search(1));
         hashTable.delete(1);
     }
     
@@ -101,19 +102,34 @@ public class HashTableTest extends TestCase {
         Handle handle = new Handle();
         hashTable.insert(1, handle);
         hashTable.insert(5, handle);
-        assertFalse(hashTable.search(1) == null);
-        assertFalse(hashTable.search(5) == null);
+        assertNotNull(hashTable.search(1));
+        assertNotNull(hashTable.search(5));
         assertTrue(hashTable.getArray()[hashTable.h1(5)].getKey() != 5);
         assertFalse(hashTable.getArray()[(hashTable.h1(5) + 
                 hashTable.h2(5)) % hashTable.getSize()].getKey() != 5);
         assertEquals(hashTable.getCount(), 2);
         hashTable.delete(5);
-        assertTrue(hashTable.search(5) == null);
+        assertNull(hashTable.search(5));
         assertTrue(hashTable.getArray()[(hashTable.h1(5) + 
                 hashTable.h2(5)) % hashTable.getSize()].getKey() != 5);
         assertEquals(hashTable.getCount(), 1);
         hashTable.delete(1);
         assertEquals(hashTable.getCount(), 0);
+    }
+    
+    /**
+     * Test delete a tombstone
+     */ 
+    @Test
+    public void testDeleteTombstone() {
+        HashTable hashTable = new HashTable(4);
+        Handle handle = new Handle();
+        hashTable.insert(1, handle);
+        assertNotNull(hashTable.search(1));
+        hashTable.delete(1);
+        assertNull(hashTable.search(1));
+        hashTable.delete(1);
+        assertNull(hashTable.search(1));
     }
     
     /**
@@ -173,7 +189,7 @@ public class HashTableTest extends TestCase {
         assertNotNull(hashTable.search(0));
         assertNull(hashTable.search(1));
         for (int i = 0; i < 8; i++) {
-            if (hashTable.search(i) != null){
+            if (hashTable.search(i) != null) {
                 assertTrue(hashTable.getArray()[i].getKey() != -1);
             }
         }
@@ -189,7 +205,46 @@ public class HashTableTest extends TestCase {
             hashTable.insert(i, new Handle());
         }
         hashTable.delete(3);
-        hashTable.print();
+        assertNotNull(hashTable.search(0));
+        assertNotNull(hashTable.search(1));
+        assertNotNull(hashTable.search(2));
+        assertNull(hashTable.search(3));
+        String output = hashTable.print();
+        assertTrue(output.contains("0: 0"));
+        assertTrue(output.contains("1: 1"));
+        assertTrue(output.contains("2: 2"));
+        assertTrue(output.contains("3: TOMBSTONE"));
+        assertTrue(output.contains("total records: 3"));
+    }
+    
+    /**
+     * Test the h2 method with different keys
+     */
+    @Test
+    public void testH2() {
+        HashTable hashTable = new HashTable(4);
+        int result1 = hashTable.h2(3);
+        int result2 = hashTable.h2(4);
+        int result3 = hashTable.h2(5);
+        assertEquals(1, result1);
+        assertEquals(3, result2);
+        assertEquals(3, result3);
+    }
+    
+    /**
+     * Test the h2 method with different sizes
+     */
+    @Test
+    public void testH2WithDifferentSizes() {
+        HashTable hashTable = new HashTable(4);
+        int result1 = hashTable.h2(3);  
+        assertEquals(1, result1);
+        hashTable = new HashTable(8);
+        result1 = hashTable.h2(3);
+        assertEquals(1, result1);
+        hashTable = new HashTable(2);
+        result1 = hashTable.h2(3);
+        assertEquals(1, result1);
     }
 }
 

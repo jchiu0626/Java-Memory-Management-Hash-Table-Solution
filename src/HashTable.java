@@ -38,8 +38,7 @@ public class HashTable {
      * @param handle the handle corresponding to the current seminar id
      */
     public void insert(int key, Handle handle) {
-        count++;
-        if (count > size / 2) {
+        if (count >= size / 2) {
             resize(2 * size);
         }
         int i = h1(key);
@@ -47,6 +46,7 @@ public class HashTable {
             i = (i + h2(key)) % size;
         }
         array[i] = new Record(key, handle);
+        count++;
     }
 
     /**
@@ -104,20 +104,23 @@ public class HashTable {
     /**
      * Print the contents in the hash table if there exists key and value
      *
+     * @return  the output including the content of the hash table
      */
 
-    public void print() {
+    public String print() {
+        String output = "";
         for (int i = 0; i < size; i++) {
             if (array[i] != null) {
                 if (array[i].getKey() == -1) {
-                    System.out.println(i + ": TOMBSTONE");
+                    output += i + ": TOMBSTONE\n";
                 }
                 else {
-                    System.out.println(i + ": " + array[i].getKey());
+                    output += i + ": " + array[i].getKey() + "\n";
                 }
             }
         }
-        System.out.println("total records: " + this.count);
+        output += "total records: " + this.count;
+        return output;
     }
 
     /**

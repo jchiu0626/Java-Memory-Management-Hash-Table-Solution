@@ -74,7 +74,7 @@ public class SemManager {
             return;
         }
         HashTable hashTable = new HashTable(hashSize);
-        MemManager memManager = new MemManager(memorySize);
+        MemManager memManager = new MemManager(memorySize, false);
         
 
         /**
@@ -93,7 +93,7 @@ public class SemManager {
          * Create new Parser object and parse the content in the file
          */
         Parser parser = new Parser(commandFile);
-        parser.parse(hashTable);
+        parser.parse(hashTable, memManager);
 
     }
 }

@@ -1,13 +1,14 @@
 import java.io.FileNotFoundException;
-
 import org.junit.Test;
-
 import student.TestCase;
 
+//-------------------------------------------------------------------------
 /**
- * @author Yung-Lin Chiu
- * @version September 2023
- */
+*  Test the SemManager class
+*
+*  @author Yung-Lin Chiu
+*  @version September 2023
+*/
 public class SemManagerTest extends TestCase {
     /**
      * Sets up the tests that follow. In general, used for initialization
