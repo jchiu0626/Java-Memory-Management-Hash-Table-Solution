@@ -94,7 +94,6 @@ public class SemManager {
          */
         Parser parser = new Parser(commandFile);
         parser.parse(hashTable, memManager);
-
     }
 }
 

@@ -105,6 +105,5 @@ public class ParserTest extends TestCase {
         assertTrue(output.contains("Hashtable: "));
         assertTrue(output.contains("Freeblock List:"));
     }
-
 }
 
